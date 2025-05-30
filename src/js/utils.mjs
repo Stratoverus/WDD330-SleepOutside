@@ -74,3 +74,14 @@ export function updateCartCount() {
     cartCountElement.style.display = cartCount > 0 ? "block" : "none";
   }
 }
+
+export function calculateCartTotal() {
+  const cartItems = getLocalStorage('so-cart');
+
+  if (!Array.isArray(cartItems)) return 0;
+
+  return cartItems.reduce((total, item) => {
+    const itemTotal = (item.FinalPrice || 0) * (item.quantity || 0);
+    return total + itemTotal;
+  }, 0);
+}
