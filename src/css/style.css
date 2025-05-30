@@ -120,6 +120,8 @@ button {
 .cart {
   padding-top: 1em;
   position: relative;
+  margin-top: 12px;
+  padding-top: 5px;
   text-align: center;
 }
 
@@ -131,7 +133,18 @@ button {
   fill: gray;
 }
 
-/* End cart icon styles */
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1;
+}
 
 .mission {
   position: absolute;
@@ -149,6 +162,19 @@ button {
   margin: 0 auto;
   width: 50%;
   text-align: center;
+}
+
+.product-categories {
+  columns: 4;
+  column-gap: 1rem;
+  list-style-type: none;
+  text-align: center;
+}
+
+.product-categories a {
+  text-decoration: none;
+  color: var(--dark-grey);
+  font-size: var(--small-font);
 }
 
 .products {

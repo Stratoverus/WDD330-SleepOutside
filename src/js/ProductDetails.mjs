@@ -1,4 +1,5 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { updateCartCount } from "./utils.mjs";
 
 export default class ProductDetails {
   constructor(productID, dataSource) {
@@ -33,6 +34,7 @@ export default class ProductDetails {
     }
     
     setLocalStorage("so-cart", cart);
+    updateCartCount();
   }
 
   renderProductDetails() {
@@ -45,12 +47,12 @@ function productDetailsTemplate(product) {
   document.querySelector('h3').textContent = product.NameWithoutBrand;
 
   const productImage = document.getElementById('productImage');
-  productImage.src = product.Image;
+  productImage.src = product.Images.PrimaryLarge;
   productImage.alt = product.NameWithoutBrand;
 
-  document.getElementById('productPrice').textContent = product.FinalPrice;
-  document.getElementById('productColor').textContent = product.Colors[0].ColorName;
-  document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
+  document.getElementById('productPrice').innerHTML = `<b>Price:</b> $${product.FinalPrice}`;
+  document.getElementById('productColor').innerHTML = `<b>Color:</b> ${product.Colors[0].ColorName}`;
+  document.getElementById('productDesc').innerHTML = `<b>Description:</b> ${product.DescriptionHtmlSimple}`;
 
   document.getElementById('addToCart').dataset.id = product.Id;
 }
