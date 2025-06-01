@@ -332,6 +332,39 @@ legend {
   grid-column: 3;
 }
 
+/*checkout alerting css*/
+.checkout-alert {
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: medium;
+  display: block;
+  visibility: visible;
+  position: relative;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+.alert-close-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: medium;
+  font-weight: bold;
+  color: #842029;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+}
+
+.checkout-alert ul {
+  margin: 0;
+  padding-left: 10px;
+  list-style-type: disc;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;

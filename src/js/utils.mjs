@@ -85,3 +85,48 @@ export function calculateCartTotal() {
     return total + itemTotal;
   }, 0);
 }
+
+export function alertMessage(message, scroll=true) {
+  //removing the alert, just in case user didn't x out the other
+  const existingAlert = document.querySelector(".checkout-alert");
+  if (existingAlert) {
+    existingAlert.remove();
+  }
+
+  //creating the container
+  const alert = document.createElement("div");
+  alert.classList.add("checkout-alert");
+
+  //making the close button
+  const closeBtn = document.createElement("button");
+  closeBtn.classList.add("alert-close-btn");
+  closeBtn.innerHTML = "&times;";
+  closeBtn.setAttribute("aria-label", "Close alert");
+  closeBtn.addEventListener("click", () => {
+    alert.remove();
+  });
+  alert.appendChild(closeBtn);
+
+  //message content has been added
+  if (typeof message === "string") {
+    const msg = document.createElement("p");
+    msg.textContent = message;
+    alert.appendChild(msg);
+  } else if (typeof message === "object") {
+    const list = document.createElement("ul");
+    for (const msg of Object.values(message)) {
+      const li = document.createElement("li");
+      li.textContent = msg;
+      list.appendChild(li);
+    }
+    alert.appendChild(list);
+  }
+
+  //putting the alert at the top of the page
+  const header = document.querySelector("header");
+  header.insertAdjacentElement("afterend", alert);
+
+  if (scroll) {
+    header.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
