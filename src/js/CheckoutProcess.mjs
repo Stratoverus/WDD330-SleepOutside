@@ -1,6 +1,7 @@
 import { calculateCartTotal } from "./utils.mjs";
 import { getLocalStorage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
+import { alertMessage } from "./utils.mjs";
 
 const services = new ExternalServices();
 
@@ -8,6 +9,9 @@ const TAX_RATE = 0.06;
 const BASE_SHIPPING = 10;
 const EXTRA_ITEM_SHIPPING = 2;
 
+function clearCart() {
+  localStorage.removeItem('so-cart');
+}
 
 
 function packageItems(items) {
@@ -86,11 +90,18 @@ export default class CheckoutProcess {
     console.log(order);
 
     try {
-        const response = await services.checkout(order);
-        console.log(response);
-    } catch (err) {
+      const response = await services.checkout(order);
+      if (response?.message === "Order Placed") {
+        clearCart();
+        window.location.href = "/checkout/success.html";
+      } else {
+        alertMessage("Order failed. Please try again.");
+      }
+      } catch (err) {
         console.log(err);
-    }
+        const errorData = err?.message;
+        alertMessage(errorData || "Something went wrong. Please try again.");
+      }
     }
 }
 

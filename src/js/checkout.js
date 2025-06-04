@@ -17,8 +17,11 @@ document.querySelector("#zip").addEventListener("blur", () => {
 
 document.querySelector("#checkoutSubmit").addEventListener("click", (e) => {
   e.preventDefault();
-
-  checkout.checkout();
+  const form = document.forms[0];
+  const check_status = form.checkValidity();
+  form.reportValidity();
+  if(check_status)
+    checkout.checkout();
 });
 
 loadHeaderFooter();
