@@ -218,10 +218,44 @@ button {
 /* Start cart list card styles */
 .cart-card {
   display: grid;
-  grid-template-columns: 25% auto 15%;
-  font-size: var(--small-font);
-  /* max-height: 120px; */
-  align-items: center;
+  grid-template-columns: 150px auto 15%;
+  grid-template-areas:
+    "image name price"
+    "image color price"
+    ". qty ."
+    ". remove .";
+  grid-gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--light-grey);
+  position: relative;
+}
+
+.remove-item {
+  grid-area: remove;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+  width: 100px;
+  margin-top: 0.5rem;
+}
+
+.remove-item:hover {
+  background-color: #cc0000;
+}
+
+.remove-item:active {
+  transform: translateY(1px);
+}
+
+.cart-card .card__name {
+  grid-row: 1;
+  grid-column: 2;
 }
 
 .cart-card__image {
@@ -233,10 +267,6 @@ button {
   margin-top: 0;
 }
 
-.cart-card .card__name {
-  grid-row: 1;
-  grid-column: 2;
-}
 
 .cart-card__color {
   grid-row: 2;
