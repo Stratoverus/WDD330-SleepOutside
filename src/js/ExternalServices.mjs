@@ -4,17 +4,17 @@ async function convertToJson(res) {
   try {
     const data = await res.json();
     if (!res.ok) {
-      // Crear un error personalizado con más detalles
-      const error = new Error(data.message || 'Error en la solicitud');
+      // Create a custom error with more details
+      const error = new Error(data.message || 'Request error');
       error.status = res.status;
       error.data = data;
       throw error;
     }
     return data;
   } catch (error) {
-    // Si hay un error al parsear el JSON o cualquier otro error
+    // If there's an error parsing JSON or any other error
     if (error.name === 'SyntaxError') {
-      const parseError = new Error('Error al procesar la respuesta del servidor');
+      const parseError = new Error('Error processing server response');
       parseError.status = res.status;
       parseError.originalError = error;
       throw parseError;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>¡Pedido Confirmado! - SleepOutside</title>
+  <title>Order Confirmed! - SleepOutside</title>
   <link rel="stylesheet" href="/css/style.css">
   <style>
     .success-container {
@@ -50,19 +50,19 @@
   <main class="divider">
     <div class="success-container">
       <div class="success-icon">✓</div>
-      <h1>¡Gracias por tu compra!</h1>
-      <p>Tu pedido ha sido procesado exitosamente.</p>
+      <h1>Thank You for Your Order!</h1>
+      <p>Your order has been successfully processed.</p>
       
       <div class="order-details">
-        <h2>Detalles del Pedido</h2>
-        <p><strong>Número de Pedido:</strong> <span id="order-number"></span></p>
-        <p><strong>Fecha del Pedido:</strong> <span id="order-date"></span></p>
-        <p><strong>Fecha Estimada de Entrega:</strong> <span id="delivery-date"></span></p>
-        <p>Hemos enviado un correo electrónico con los detalles de tu pedido.</p>
+        <h2>Order Details</h2>
+        <p><strong>Order Number:</strong> <span id="order-number"></span></p>
+        <p><strong>Order Date:</strong> <span id="order-date"></span></p>
+        <p><strong>Estimated Delivery Date:</strong> <span id="delivery-date"></span></p>
+        <p>We've sent an email with your order details.</p>
       </div>
       
-      <p>¿Neitas ayuda con tu pedido? <a href="/contact.html">Contáctanos</a></p>
-      <a href="/" class="btn-continue">Seguir Comprando</a>
+      <p>Need help with your order? <a href="/contact.html">Contact Us</a></p>
+      <a href="/" class="btn-continue">Continue Shopping</a>
     </div>
   </main>
   
@@ -81,9 +81,9 @@
     // Mostrar información del pedido
     document.getElementById('order-number').textContent = orderNumber;
     
-    // Fecha actual
+    // Current date
     const now = new Date();
-    document.getElementById('order-date').textContent = now.toLocaleDateString('es-ES', {
+    document.getElementById('order-date').textContent = now.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -91,15 +91,15 @@
       minute: '2-digit'
     });
     
-    // Fecha estimada de entrega (5 días hábiles)
+    // Estimated delivery date (5 business days)
     const deliveryDate = new Date(now);
     deliveryDate.setDate(deliveryDate.getDate() + 5);
     
-    // Ajustar si es fin de semana
+    // Adjust if it's a weekend
     if (deliveryDate.getDay() === 6) deliveryDate.setDate(deliveryDate.getDate() + 2);
     else if (deliveryDate.getDay() === 0) deliveryDate.setDate(deliveryDate.getDate() + 1);
     
-    document.getElementById('delivery-date').textContent = deliveryDate.toLocaleDateString('es-ES', {
+    document.getElementById('delivery-date').textContent = deliveryDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

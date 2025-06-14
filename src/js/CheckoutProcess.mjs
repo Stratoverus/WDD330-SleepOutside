@@ -74,16 +74,16 @@ export default class CheckoutProcess {
   async checkout() {
     const formElement = document.forms['checkout'];
     
-    // Validar el formulario
+    // Validate form
     if (!formElement.checkValidity()) {
       formElement.reportValidity();
-      throw new Error('Por favor, completa todos los campos requeridos correctamente.');
+      throw new Error('Please fill in all required fields correctly.');
     }
 
-    // Verificar que hay productos en el carrito
+    // Check if there are products in the cart
     const cartItems = getLocalStorage('so-cart') || [];
     if (cartItems.length === 0) {
-      throw new Error('Tu carrito está vacío. No se puede realizar el pago.');
+      throw new Error('Your cart is empty. Cannot proceed with payment.');
     }
 
     // Crear objeto de orden
@@ -95,22 +95,22 @@ export default class CheckoutProcess {
     order.items = packageItems(cartItems);
     
     try {
-      // Mostrar indicador de carga
+      // Show loading indicator
       const submitBtn = document.querySelector('#checkoutSubmit');
       const originalBtnText = submitBtn.textContent;
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Procesando...';
+      submitBtn.textContent = 'Processing...';
       
       // Enviar la orden
       const response = await services.checkout(order);
       
-      // Limpiar carrito y redirigir a la página de éxito
+      // Clear cart and redirect to success page
       localStorage.removeItem('so-cart');
       
-      // Generar un número de orden (usando timestamp si no viene del servidor)
+      // Generate order number (using timestamp if not provided by server)
       const orderNumber = response.orderId || `ORD-${Date.now()}`;
       
-      // Redirigir a la página de éxito con el número de orden
+      // Redirect to success page with order number
       window.location.href = `/checkout/success.html?order=${orderNumber}`;
       
       return response;
@@ -118,15 +118,15 @@ export default class CheckoutProcess {
     } catch (error) {
       console.error('Error en el proceso de pago:', error);
       
-      // Mensajes de error personalizados según el tipo de error
-      let errorMessage = 'Ocurrió un error al procesar tu pago. Por favor, inténtalo de nuevo.';
+      // Custom error messages based on error type
+      let errorMessage = 'An error occurred while processing your payment. Please try again.';
       
       if (error.status === 400) {
-        errorMessage = 'Hay un problema con la información proporcionada. Por favor, verifica los datos.';
+        errorMessage = 'There is a problem with the provided information. Please check your data.';
       } else if (error.status === 401 || error.status === 403) {
-        errorMessage = 'No autorizado. Por favor, inicia sesión para continuar.';
+        errorMessage = 'Unauthorized. Please log in to continue.';
       } else if (error.status >= 500) {
-        errorMessage = 'Error en el servidor. Por favor, inténtalo más tarde.';
+        errorMessage = 'Server error. Please try again later.';
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -138,11 +138,11 @@ export default class CheckoutProcess {
       throw error;
       
     } finally {
-      // Restaurar el botón de envío
+      // Restore submit button
       const submitBtn = document.querySelector('#checkoutSubmit');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText || 'Realizar Pago';
+        submitBtn.textContent = originalBtnText || 'Complete Purchase';
       }
     }
   }  
