@@ -15,10 +15,15 @@ document.querySelector("#zip").addEventListener("blur", () => {
   checkout.calculateOrderTotal();
 });
 
-document.querySelector("#checkoutSubmit").addEventListener("click", (e) => {
+document.querySelector("#checkoutSubmit").addEventListener("click", async (e) => {
   e.preventDefault();
-
-  checkout.checkout();
+  
+  try {
+    await checkout.checkout();
+  } catch (error) {
+    // El error ya fue manejado en el método checkout
+    console.error('Error en el proceso de pago:', error);
+  }
 });
 
 loadHeaderFooter();

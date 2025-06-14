@@ -72,26 +72,78 @@ export default class CheckoutProcess {
   }
 
   async checkout() {
-    const formElement = document.forms["checkout"];
-    const order = formDataToJSON(formElement);
+    const formElement = document.forms['checkout'];
+    
+    // Validar el formulario
+    if (!formElement.checkValidity()) {
+      formElement.reportValidity();
+      throw new Error('Por favor, completa todos los campos requeridos correctamente.');
+    }
 
+    // Verificar que hay productos en el carrito
     const cartItems = getLocalStorage('so-cart') || [];
-    order.items = packageItems(cartItems);
+    if (cartItems.length === 0) {
+      throw new Error('Tu carrito está vacío. No se puede realizar el pago.');
+    }
 
+    // Crear objeto de orden
+    const order = formDataToJSON(formElement);
     order.orderDate = new Date().toISOString();
     order.orderTotal = this.orderTotal;
     order.tax = this.tax;
     order.shipping = this.shipping;
-
-    console.log(order);
-
+    order.items = packageItems(cartItems);
+    
     try {
-        const response = await services.checkout(order);
-        console.log(response);
-    } catch (err) {
-        console.log(err);
+      // Mostrar indicador de carga
+      const submitBtn = document.querySelector('#checkoutSubmit');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Procesando...';
+      
+      // Enviar la orden
+      const response = await services.checkout(order);
+      
+      // Limpiar carrito y redirigir a la página de éxito
+      localStorage.removeItem('so-cart');
+      
+      // Generar un número de orden (usando timestamp si no viene del servidor)
+      const orderNumber = response.orderId || `ORD-${Date.now()}`;
+      
+      // Redirigir a la página de éxito con el número de orden
+      window.location.href = `/checkout/success.html?order=${orderNumber}`;
+      
+      return response;
+      
+    } catch (error) {
+      console.error('Error en el proceso de pago:', error);
+      
+      // Mensajes de error personalizados según el tipo de error
+      let errorMessage = 'Ocurrió un error al procesar tu pago. Por favor, inténtalo de nuevo.';
+      
+      if (error.status === 400) {
+        errorMessage = 'Hay un problema con la información proporcionada. Por favor, verifica los datos.';
+      } else if (error.status === 401 || error.status === 403) {
+        errorMessage = 'No autorizado. Por favor, inicia sesión para continuar.';
+      } else if (error.status >= 500) {
+        errorMessage = 'Error en el servidor. Por favor, inténtalo más tarde.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      // Mostrar mensaje de error al usuario
+      alert(errorMessage);
+      
+      // Re-lanzar el error para que pueda ser manejado por el código que llama a este método
+      throw error;
+      
+    } finally {
+      // Restaurar el botón de envío
+      const submitBtn = document.querySelector('#checkoutSubmit');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText || 'Realizar Pago';
+      }
     }
-    }
+  }  
 }
-
-

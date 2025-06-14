@@ -1,10 +1,26 @@
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
-function convertToJson(res) {
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error("Bad Response");
+async function convertToJson(res) {
+  try {
+    const data = await res.json();
+    if (!res.ok) {
+      // Crear un error personalizado con más detalles
+      const error = new Error(data.message || 'Error en la solicitud');
+      error.status = res.status;
+      error.data = data;
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    // Si hay un error al parsear el JSON o cualquier otro error
+    if (error.name === 'SyntaxError') {
+      const parseError = new Error('Error al procesar la respuesta del servidor');
+      parseError.status = res.status;
+      parseError.originalError = error;
+      throw parseError;
+    }
+    // Relanzar el error si ya es un error personalizado
+    throw error;
   }
 }
 

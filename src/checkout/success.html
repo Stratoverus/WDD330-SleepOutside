@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Pedido Confirmado! - SleepOutside</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .success-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .success-icon {
+      font-size: 4rem;
+      color: #28a745;
+      margin-bottom: 1rem;
+    }
+    .order-details {
+      text-align: left;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    .order-details p {
+      margin: 0.5rem 0;
+    }
+    .btn-continue {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .btn-continue:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <header class="divider" id="start-header"></header>
+  <main class="divider">
+    <div class="success-container">
+      <div class="success-icon">✓</div>
+      <h1>¡Gracias por tu compra!</h1>
+      <p>Tu pedido ha sido procesado exitosamente.</p>
+      
+      <div class="order-details">
+        <h2>Detalles del Pedido</h2>
+        <p><strong>Número de Pedido:</strong> <span id="order-number"></span></p>
+        <p><strong>Fecha del Pedido:</strong> <span id="order-date"></span></p>
+        <p><strong>Fecha Estimada de Entrega:</strong> <span id="delivery-date"></span></p>
+        <p>Hemos enviado un correo electrónico con los detalles de tu pedido.</p>
+      </div>
+      
+      <p>¿Neitas ayuda con tu pedido? <a href="/contact.html">Contáctanos</a></p>
+      <a href="/" class="btn-continue">Seguir Comprando</a>
+    </div>
+  </main>
+  
+  <footer id="footer"></footer>
+  
+  <script type="module">
+    import { loadHeaderFooter } from "../js/utils.mjs";
+    
+    // Cargar header y footer
+    loadHeaderFooter();
+    
+    // Obtener el número de pedido de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderNumber = urlParams.get('order') || 'N/A';
+    
+    // Mostrar información del pedido
+    document.getElementById('order-number').textContent = orderNumber;
+    
+    // Fecha actual
+    const now = new Date();
+    document.getElementById('order-date').textContent = now.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    // Fecha estimada de entrega (5 días hábiles)
+    const deliveryDate = new Date(now);
+    deliveryDate.setDate(deliveryDate.getDate() + 5);
+    
+    // Ajustar si es fin de semana
+    if (deliveryDate.getDay() === 6) deliveryDate.setDate(deliveryDate.getDate() + 2);
+    else if (deliveryDate.getDay() === 0) deliveryDate.setDate(deliveryDate.getDate() + 1);
+    
+    document.getElementById('delivery-date').textContent = deliveryDate.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long'
+    });
+  </script>
+</body>
+</html>
